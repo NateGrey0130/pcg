@@ -1,18 +1,26 @@
-// Ensure Firebase is loaded before initialization
-if (typeof firebase !== 'undefined') {
+// Ensure Firebase SDK is loaded before initialization
+if (typeof firebase !== "undefined") {
     const firebaseConfig = {
-        apiKey: "AIzaSyDnvXMxZAUqGIoc3VJGBU3LGJGoyJp3x9k",
-        authDomain: "palladium-970d7.firebaseapp.com",
-        projectId: "palladium-970d7",
-        storageBucket: "palladium-970d7.firebasestorage.app",
-        messagingSenderId: "1017691426124",
-        appId: "1:1017691426124:web:eb55e79525c44a318b93e9"
+        apiKey: "YOUR_API_KEY",
+        authDomain: "YOUR_AUTH_DOMAIN",
+        projectId: "YOUR_PROJECT_ID",
+        storageBucket: "YOUR_STORAGE_BUCKET",
+        messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+        appId: "YOUR_APP_ID"
     };
 
     // Initialize Firebase
     firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
     const db = firebase.firestore();
+
+    // Expose Firebase globally
+    window.firebase = firebase;
+    window.auth = auth;
+    window.db = db;
+} else {
+    console.error("Firebase SDK not loaded!");
+}
 
     // Authentication functions
     function signIn() {

@@ -69,7 +69,6 @@ function signOut() {
     }
 }
 
-// Update UI when auth state changes
 function updateUserStatus() {
     if (window.auth) {
         window.auth.onAuthStateChanged((user) => {
@@ -80,8 +79,6 @@ function updateUserStatus() {
     }
 }
 
-// Ensure user status updates on page load
 document.addEventListener("DOMContentLoaded", () => {
     updateUserStatus();
 });
-
