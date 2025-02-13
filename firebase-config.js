@@ -1,3 +1,4 @@
+
 // Ensure Firebase SDK is loaded before initializing
 if (typeof firebase !== "undefined") {
     apiKey: "AIzaSyDioPgfZOUyBXht6OkXmvs6Q8M-6KVQgO0",
@@ -19,6 +20,9 @@ if (typeof firebase !== "undefined") {
     window.firebase = firebase;
     window.auth = auth;
     window.db = db;
+
+    console.log("✅ Firebase initialized successfully!");
 } else {
-    console.error("Firebase SDK not loaded!");
+    console.error("❌ Firebase SDK not loaded!");
 }
+
