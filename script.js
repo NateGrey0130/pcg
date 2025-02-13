@@ -38,19 +38,28 @@ function clearHistory() {
     document.getElementById("rollHistory").innerHTML = "";
 }
 
+document.addEventListener("DOMContentLoaded", () => {
+    if (!window.auth) {
+        console.error("❌ Firebase Authentication is not available!");
+        return;
+    }
+    
+    updateUserStatus();
+});
+
 function signIn() {
     if (window.auth) {
         let provider = new firebase.auth.GoogleAuthProvider();
         window.auth.signInWithPopup(provider)
             .then((result) => {
-                console.log("Signed in:", result.user.displayName);
+                console.log("✅ Signed in:", result.user.displayName);
                 updateUserStatus();
             })
             .catch((error) => {
-                console.error("Sign-in error:", error.message);
+                console.error("❌ Sign-in error:", error.message);
             });
     } else {
-        console.error("Firebase Authentication is not available!");
+        console.error("❌ Firebase Authentication is not available!");
     }
 }
 
@@ -58,14 +67,14 @@ function signOut() {
     if (window.auth) {
         window.auth.signOut()
             .then(() => {
-                console.log("Signed out");
+                console.log("✅ Signed out");
                 updateUserStatus();
             })
             .catch((error) => {
-                console.error("Sign-out error:", error.message);
+                console.error("❌ Sign-out error:", error.message);
             });
     } else {
-        console.error("Firebase Authentication is not available!");
+        console.error("❌ Firebase Authentication is not available!");
     }
 }
 
@@ -76,9 +85,7 @@ function updateUserStatus() {
                 ? `Signed in as ${user.displayName}` 
                 : "Not Signed In";
         });
+    } else {
+        console.error("❌ Firebase Authentication is not available!");
     }
 }
-
-document.addEventListener("DOMContentLoaded", () => {
-    updateUserStatus();
-});
