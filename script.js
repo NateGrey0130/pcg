@@ -39,38 +39,49 @@ function clearHistory() {
 }
 
 function signIn() {
-    let provider = new firebase.auth.GoogleAuthProvider();
-    auth.signInWithPopup(provider)
-        .then((result) => {
-            console.log("Signed in:", result.user.displayName);
-            updateUserStatus();
-        })
-        .catch((error) => {
-            console.error("Sign-in error:", error.message);
-        });
+    if (window.auth) {
+        let provider = new firebase.auth.GoogleAuthProvider();
+        window.auth.signInWithPopup(provider)
+            .then((result) => {
+                console.log("Signed in:", result.user.displayName);
+                updateUserStatus();
+            })
+            .catch((error) => {
+                console.error("Sign-in error:", error.message);
+            });
+    } else {
+        console.error("Firebase Authentication is not available!");
+    }
 }
 
 function signOut() {
-    auth.signOut()
-        .then(() => {
-            console.log("Signed out");
-            updateUserStatus();
-        })
-        .catch((error) => {
-            console.error("Sign-out error:", error.message);
-        });
+    if (window.auth) {
+        window.auth.signOut()
+            .then(() => {
+                console.log("Signed out");
+                updateUserStatus();
+            })
+            .catch((error) => {
+                console.error("Sign-out error:", error.message);
+            });
+    } else {
+        console.error("Firebase Authentication is not available!");
+    }
 }
 
-// Update UI based on authentication state
+// Update UI when auth state changes
 function updateUserStatus() {
-    auth.onAuthStateChanged((user) => {
-        if (user) {
-            document.getElementById("userStatus").innerText = `Signed in as ${user.displayName}`;
-        } else {
-            document.getElementById("userStatus").innerText = "Not Signed In";
-        }
-    });
+    if (window.auth) {
+        window.auth.onAuthStateChanged((user) => {
+            document.getElementById("userStatus").innerText = user 
+                ? `Signed in as ${user.displayName}` 
+                : "Not Signed In";
+        });
+    }
 }
 
 // Ensure user status updates on page load
-updateUserStatus();
+document.addEventListener("DOMContentLoaded", () => {
+    updateUserStatus();
+});
+
