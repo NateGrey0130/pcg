@@ -1,64 +1,21 @@
-// Ensure Firebase SDK is loaded before initialization
-if (typeof firebase !== "undefined") {
-    const firebaseConfig = {
-        apiKey: "YOUR_API_KEY",
-        authDomain: "YOUR_AUTH_DOMAIN",
-        projectId: "YOUR_PROJECT_ID",
-        storageBucket: "YOUR_STORAGE_BUCKET",
-        messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-        appId: "YOUR_APP_ID"
-    };
+// Firebase configuration
+const firebaseConfig = {
+    apiKey: "AIzaSyDioPgfZOUyBXht6OkXmvs6Q8M-6KVQgO0",
+    authDomain: "ttrpg-dice-roller.firebaseapp.com",
+    projectId: "ttrpg-dice-roller",
+    storageBucket: "ttrpg-dice-roller.firebasestorage.app",
+    messagingSenderId: "81673731735",
+    appId: "1:81673731735:web:489d81cf18fe6e165873d2"
+  };
 
-    // Initialize Firebase
-    firebase.initializeApp(firebaseConfig);
-    const auth = firebase.auth();
-    const db = firebase.firestore();
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
 
-    // Expose Firebase globally
-    window.firebase = firebase;
-    window.auth = auth;
-    window.db = db;
-} else {
-    console.error("Firebase SDK not loaded!");
-}
+// Initialize Firebase Authentication & Firestore
+const auth = firebase.auth();
+const db = firebase.firestore();
 
-    // Authentication functions
-    function signIn() {
-        let provider = new firebase.auth.GoogleAuthProvider();
-        auth.signInWithPopup(provider)
-            .then((result) => {
-                console.log("Signed in:", result.user.displayName);
-                updateUserStatus();
-            })
-            .catch((error) => {
-                console.error("Sign-in error:", error.message);
-            });
-    }
-
-    function signOut() {
-        auth.signOut()
-            .then(() => {
-                console.log("Signed out");
-                updateUserStatus();
-            })
-            .catch((error) => {
-                console.error("Sign-out error:", error.message);
-            });
-    }
-
-    // Update UI based on authentication state
-    function updateUserStatus() {
-        auth.onAuthStateChanged((user) => {
-            if (user) {
-                document.getElementById("userStatus").innerText = `Signed in as ${user.displayName}`;
-            } else {
-                document.getElementById("userStatus").innerText = "Not Signed In";
-            }
-        });
-    }
-
-    // Ensure user status updates on page load
-    updateUserStatus();
-} else {
-    console.error("Firebase SDK not loaded!");
-}
+// Expose Firebase globally for use in other scripts
+window.firebase = firebase;
+window.auth = auth;
+window.db = db;
