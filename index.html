@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TTRPG Dice Roller</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>TTRPG Dice Roller</h1>
+        
+        <div class="dice-options">
+            <label for="numDice">Number of Dice:</label>
+            <input type="number" id="numDice" min="1" max="20" value="1">
+            
+            <label for="diceType">Dice Type:</label>
+            <select id="diceType">
+                <option value="4">d4</option>
+                <option value="6" selected>d6</option>
+                <option value="8">d8</option>
+                <option value="10">d10</option>
+                <option value="12">d12</option>
+                <option value="20">d20</option>
+                <option value="100">d100</option>
+            </select>
+
+            <label for="modifier">Modifier:</label>
+            <input type="number" id="modifier" value="0">
+
+            <button onclick="rollDice()">Roll</button>
+        </div>
+
+        <div class="result">
+            <h2>Result:</h2>
+            <p id="rollResult">-</p>
+        </div>
+
+        <h2>Roll History</h2>
+        <ul id="rollHistory"></ul>
+
+        <button onclick="clearHistory()">Clear History</button>
+
+        <div id="auth-section">
+            <button onclick="signIn()">Sign In</button>
+            <button onclick="signOut()">Sign Out</button>
+            <p id="userStatus">Not Signed In</p>
+        </div>
+    </div>
+
+    <script src="firebase-config.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
