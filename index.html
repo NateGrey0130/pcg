@@ -5,9 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TTRPG Dice Roller</title>
     <link rel="stylesheet" href="style.css">
+    
+    <!-- Load Firebase SDKs -->
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js"></script>
+    
+    <!-- Load Firebase config and main script after SDKs -->
+    <script src="firebase-config.js" defer></script>
+    <script src="script.js" defer></script>
 </head>
 <body>
     <div class="container">
@@ -50,8 +56,5 @@
             <p id="userStatus">Not Signed In</p>
         </div>
     </div>
-
-    <script src="firebase-config.js"></script>
-    <script src="script.js"></script>
 </body>
 </html>
