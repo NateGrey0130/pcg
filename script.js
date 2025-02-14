@@ -40,16 +40,16 @@ function clearHistory() {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-    if (!window.supabase) {
-        console.error("❌ Supabase is not initialized!");
+    if (!window.supabase || !window.supabase.auth) {
+        console.error("❌ Supabase is not initialized properly!");
         return;
     }
     updateUserStatus();
 });
 
 async function signIn() {
-    if (!window.supabase) {
-        console.error("❌ Supabase is not initialized!");
+    if (!window.supabase || !window.supabase.auth) {
+        console.error("❌ Supabase is not initialized properly!");
         return;
     }
 
@@ -66,8 +66,8 @@ async function signIn() {
 }
 
 async function signOut() {
-    if (!window.supabase) {
-        console.error("❌ Supabase is not initialized!");
+    if (!window.supabase || !window.supabase.auth) {
+        console.error("❌ Supabase is not initialized properly!");
         return;
     }
 
@@ -81,8 +81,8 @@ async function signOut() {
 }
 
 async function updateUserStatus() {
-    if (!window.supabase) {
-        console.error("❌ Supabase is not initialized!");
+    if (!window.supabase || !window.supabase.auth) {
+        console.error("❌ Supabase is not initialized properly!");
         return;
     }
 
