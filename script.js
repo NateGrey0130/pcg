@@ -25,12 +25,13 @@ function saveRollToHistory(rollText) {
     newEntry.innerText = rollText;
     history.prepend(newEntry);
 
-    if (firebase.auth().currentUser) {
-        db.collection("rollHistory").add({
-            user: firebase.auth().currentUser.uid,
-            roll: rollText,
-            timestamp: firebase.firestore.FieldValue.serverTimestamp()
-        });
+    if (window.supabase) {
+        const user = window.supabase.auth.getUser();
+        if (user) {
+            window.supabase.from("rollHistory").insert([
+                { user_id: user.id, roll: rollText, timestamp: new Date().toISOString() }
+            ]);
+        }
     }
 }
 
@@ -43,7 +44,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 async function signIn() {
-    const { data, error } = await supabase.auth.signInWithOAuth({
+    const { data, error } = await window.supabase.auth.signInWithOAuth({
         provider: "google",
     });
 
@@ -56,7 +57,7 @@ async function signIn() {
 }
 
 async function signOut() {
-    const { error } = await supabase.auth.signOut();
+    const { error } = await window.supabase.auth.signOut();
     if (error) {
         console.error("❌ Sign-out error:", error.message);
     } else {
@@ -66,7 +67,7 @@ async function signOut() {
 }
 
 async function updateUserStatus() {
-    const { data: { user } } = await supabase.auth.getUser();
+    const { data: { user } } = await window.supabase.auth.getUser();
     
     document.getElementById("userStatus").innerText = user
         ? `Signed in as ${user.email}`
