@@ -4,34 +4,38 @@ body {
     color: white;
     text-align: center;
     padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    margin: 0;
 }
 
 .container {
-    max-width: 600px;
-    margin: auto;
+    width: 90%;
+    max-width: 400px;
     background: #444;
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
 }
 
-h1, h2 {
+h1 {
     margin-bottom: 10px;
 }
 
-.dice-options {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-input, select, button {
-    margin: 5px;
-    padding: 10px;
-    font-size: 16px;
+.calculator {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    margin-top: 20px;
 }
 
 button {
+    width: 100%;
+    padding: 20px;
+    font-size: 20px;
     cursor: pointer;
     background: #007BFF;
     color: white;
@@ -44,41 +48,23 @@ button:hover {
     background: #0056b3;
 }
 
-.result {
+button.operator {
+    background: #ff9800;
+}
+
+button.operator:hover {
+    background: #e68900;
+}
+
+#display {
+    width: 100%;
+    height: 50px;
     font-size: 24px;
-    font-weight: bold;
-    margin-top: 20px;
-}
-
-#rollHistory {
-    list-style: none;
-    padding: 0;
-}
-
-#rollHistory li {
-    background: #555;
-    margin: 5px;
+    text-align: right;
     padding: 10px;
+    margin-bottom: 10px;
+    border: none;
+    background: #333;
+    color: white;
     border-radius: 5px;
-}
-
-#auth-section {
-    margin-top: 20px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-#auth-section button {
-    width: 200px;
-    margin: 5px 0;
-}
-
-@media (max-width: 600px) {
-    .container {
-        width: 90%;
-    }
-    input, select, button {
-        width: 100%;
-    }
 }
