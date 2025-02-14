@@ -27,7 +27,7 @@ function saveRollToHistory(rollText) {
 
     if (window.appwrite) {
         window.appwrite.account.get().then(user => {
-            window.appwrite.database.createDocument("YOUR_DATABASE_ID", "rollHistory", {
+            window.appwrite.database.createDocument("67aec40c0020e8a1228c", "rollHistory", {
                 user_id: user.$id,
                 roll: rollText,
                 timestamp: new Date().toISOString()
