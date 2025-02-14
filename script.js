@@ -39,23 +39,18 @@ function clearHistory() {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-    if (!window.auth) {
-        console.error("❌ Firebase Authentication is not available!");
-        return;
-    }
-    
     updateUserStatus();
 });
 
 async function signIn() {
-    const { user, error } = await supabase.auth.signInWithOAuth({
+    const { data, error } = await supabase.auth.signInWithOAuth({
         provider: "google",
     });
 
     if (error) {
         console.error("❌ Sign-in error:", error.message);
     } else {
-        console.log("✅ Signed in:", user);
+        console.log("✅ Signed in:", data);
         updateUserStatus();
     }
 }
@@ -77,5 +72,3 @@ async function updateUserStatus() {
         ? `Signed in as ${user.email}`
         : "Not Signed In";
 }
-
-document.addEventListener("DOMContentLoaded", updateUserStatus);
