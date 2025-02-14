@@ -40,10 +40,19 @@ function clearHistory() {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
+    if (!window.supabase) {
+        console.error("❌ Supabase is not initialized!");
+        return;
+    }
     updateUserStatus();
 });
 
 async function signIn() {
+    if (!window.supabase) {
+        console.error("❌ Supabase is not initialized!");
+        return;
+    }
+
     const { data, error } = await window.supabase.auth.signInWithOAuth({
         provider: "google",
     });
@@ -57,6 +66,11 @@ async function signIn() {
 }
 
 async function signOut() {
+    if (!window.supabase) {
+        console.error("❌ Supabase is not initialized!");
+        return;
+    }
+
     const { error } = await window.supabase.auth.signOut();
     if (error) {
         console.error("❌ Sign-out error:", error.message);
@@ -67,6 +81,11 @@ async function signOut() {
 }
 
 async function updateUserStatus() {
+    if (!window.supabase) {
+        console.error("❌ Supabase is not initialized!");
+        return;
+    }
+
     const { data: { user } } = await window.supabase.auth.getUser();
     
     document.getElementById("userStatus").innerText = user
