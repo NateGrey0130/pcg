@@ -47,45 +47,35 @@ document.addEventListener("DOMContentLoaded", () => {
     updateUserStatus();
 });
 
-function signIn() {
-    if (window.auth) {
-        let provider = new firebase.auth.GoogleAuthProvider();
-        window.auth.signInWithPopup(provider)
-            .then((result) => {
-                console.log("✅ Signed in:", result.user.displayName);
-                updateUserStatus();
-            })
-            .catch((error) => {
-                console.error("❌ Sign-in error:", error.message);
-            });
+async function signIn() {
+    const { user, error } = await supabase.auth.signInWithOAuth({
+        provider: "google",
+    });
+
+    if (error) {
+        console.error("❌ Sign-in error:", error.message);
     } else {
-        console.error("❌ Firebase Authentication is not available!");
+        console.log("✅ Signed in:", user);
+        updateUserStatus();
     }
 }
 
-function signOut() {
-    if (window.auth) {
-        window.auth.signOut()
-            .then(() => {
-                console.log("✅ Signed out");
-                updateUserStatus();
-            })
-            .catch((error) => {
-                console.error("❌ Sign-out error:", error.message);
-            });
+async function signOut() {
+    const { error } = await supabase.auth.signOut();
+    if (error) {
+        console.error("❌ Sign-out error:", error.message);
     } else {
-        console.error("❌ Firebase Authentication is not available!");
+        console.log("✅ Signed out");
+        updateUserStatus();
     }
 }
 
-function updateUserStatus() {
-    if (window.auth) {
-        window.auth.onAuthStateChanged((user) => {
-            document.getElementById("userStatus").innerText = user 
-                ? `Signed in as ${user.displayName}` 
-                : "Not Signed In";
-        });
-    } else {
-        console.error("❌ Firebase Authentication is not available!");
-    }
+async function updateUserStatus() {
+    const { data: { user } } = await supabase.auth.getUser();
+    
+    document.getElementById("userStatus").innerText = user
+        ? `Signed in as ${user.email}`
+        : "Not Signed In";
 }
+
+document.addEventListener("DOMContentLoaded", updateUserStatus);
