@@ -64,4 +64,21 @@ button:hover {
 
 #auth-section {
     margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#auth-section button {
+    width: 200px;
+    margin: 5px 0;
+}
+
+@media (max-width: 600px) {
+    .container {
+        width: 90%;
+    }
+    input, select, button {
+        width: 100%;
+    }
 }
