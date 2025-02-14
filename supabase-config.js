@@ -4,12 +4,13 @@ const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBh
 
 try {
     // Initialize Supabase Client
-    window.supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    window.supabase = window.supabase || supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    
     console.log("✅ Supabase Initialized!", window.supabase);
 
-    // Ensure `supabase.auth` is ready
+    // Ensure `supabase.auth` exists
     if (window.supabase && window.supabase.auth) {
-        console.log("✅ Supabase.auth is available!");
+        console.log("✅ Supabase.auth is available!", window.supabase.auth);
     } else {
         console.error("❌ ERROR: supabase.auth is undefined!");
     }

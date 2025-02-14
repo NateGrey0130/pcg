@@ -44,6 +44,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     if (!window.supabase || !window.supabase.auth) {
         console.error("❌ ERROR: Supabase is not initialized or `supabase.auth` is missing!");
+        console.log("🔍 Debug: Current Supabase object:", window.supabase);
         return;
     }
 
