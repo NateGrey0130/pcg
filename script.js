@@ -39,56 +39,89 @@ function clearHistory() {
     document.getElementById("rollHistory").innerHTML = "";
 }
 
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
+    console.log("🔄 Checking if Supabase is initialized...");
+
     if (!window.supabase || !window.supabase.auth) {
-        console.error("❌ Supabase is not initialized properly!");
+        console.error("❌ ERROR: Supabase is not initialized or `supabase.auth` is missing!");
         return;
     }
-    updateUserStatus();
+
+    console.log("✅ Supabase is properly initialized in script.js!");
+    await updateUserStatus();
 });
 
 async function signIn() {
     if (!window.supabase || !window.supabase.auth) {
-        console.error("❌ Supabase is not initialized properly!");
+        console.error("❌ ERROR: Supabase is not initialized or `supabase.auth` is missing!");
         return;
     }
 
-    const { data, error } = await window.supabase.auth.signInWithOAuth({
-        provider: "google",
-    });
+    try {
+        console.log("🔄 Attempting to sign in with Google...");
+        const { data, error } = await window.supabase.auth.signInWithOAuth({
+            provider: "google",
+        });
 
-    if (error) {
-        console.error("❌ Sign-in error:", error.message);
-    } else {
-        console.log("✅ Signed in:", data);
-        updateUserStatus();
+        if (error) {
+            console.error("❌ Sign-in error:", error.message);
+        } else {
+            console.log("✅ Signed in:", data);
+            await updateUserStatus();
+        }
+    } catch (err) {
+        console.error("❌ Unexpected error in signIn:", err);
     }
 }
 
 async function signOut() {
     if (!window.supabase || !window.supabase.auth) {
-        console.error("❌ Supabase is not initialized properly!");
+        console.error("❌ ERROR: Supabase is not initialized or `supabase.auth` is missing!");
         return;
     }
 
-    const { error } = await window.supabase.auth.signOut();
-    if (error) {
-        console.error("❌ Sign-out error:", error.message);
-    } else {
-        console.log("✅ Signed out");
-        updateUserStatus();
+    try {
+        console.log("🔄 Attempting to sign out...");
+        const { error } = await window.supabase.auth.signOut();
+        if (error) {
+            console.error("❌ Sign-out error:", error.message);
+        } else {
+            console.log("✅ Signed out");
+            await updateUserStatus();
+        }
+    } catch (err) {
+        console.error("❌ Unexpected error in signOut:", err);
     }
 }
 
 async function updateUserStatus() {
     if (!window.supabase || !window.supabase.auth) {
-        console.error("❌ Supabase is not initialized properly!");
+        console.error("❌ ERROR: Supabase is not initialized or `supabase.auth` is missing!");
         return;
     }
 
-    const { data: { user } } = await window.supabase.auth.getUser();
-    
-    document.getElementById("userStatus").innerText = user
-        ? `Signed in as ${user.email}`
-        : "Not Signed In";
+    try {
+        console.log("🔄 Checking authentication status...");
+        
+        // Wait until `supabase.auth` is defined before calling `getUser()`
+        while (!window.supabase.auth) {
+            console.warn("⚠️ Waiting for `supabase.auth` to be available...");
+            await new Promise(resolve => setTimeout(resolve, 500)); // Wait for 500ms
+        }
+
+        const { data, error } = await window.supabase.auth.getUser();
+
+        if (error) {
+            console.error("❌ Error fetching user status:", error.message);
+            return;
+        }
+
+        document.getElementById("userStatus").innerText = data.user
+            ? `Signed in as ${data.user.email}`
+            : "Not Signed In";
+
+        console.log("✅ User status updated!", data.user);
+    } catch (err) {
+        console.error("❌ Unexpected error in updateUserStatus:", err);
+    }
 }
