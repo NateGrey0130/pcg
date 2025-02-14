@@ -25,13 +25,16 @@ function saveRollToHistory(rollText) {
     newEntry.innerText = rollText;
     history.prepend(newEntry);
 
-    if (window.supabase) {
-        const user = window.supabase.auth.getUser();
-        if (user) {
-            window.supabase.from("rollHistory").insert([
-                { user_id: user.id, roll: rollText, timestamp: new Date().toISOString() }
-            ]);
-        }
+    if (window.appwrite) {
+        window.appwrite.account.get().then(user => {
+            window.appwrite.database.createDocument("YOUR_DATABASE_ID", "rollHistory", {
+                user_id: user.$id,
+                roll: rollText,
+                timestamp: new Date().toISOString()
+            });
+        }).catch(error => {
+            console.error("❌ Error saving roll to Appwrite:", error);
+        });
     }
 }
 
@@ -40,57 +43,50 @@ function clearHistory() {
 }
 
 document.addEventListener("DOMContentLoaded", async () => {
-    console.log("🔄 Checking if Supabase is initialized...");
+    console.log("🔄 Checking if Appwrite is initialized...");
 
-    if (!window.supabase || !window.supabase.auth) {
-        console.error("❌ ERROR: Supabase is not initialized or `supabase.auth` is missing!");
-        console.log("🔍 Debug: Current Supabase object:", window.supabase);
+    if (!window.appwrite || !window.appwrite.account) {
+        console.error("❌ ERROR: Appwrite is not initialized!");
         return;
     }
 
-    console.log("✅ Supabase is properly initialized in script.js!");
-
-    // Force refresh session before checking authentication
-    await refreshSession();
+    console.log("✅ Appwrite is properly initialized in script.js!");
     await updateUserStatus();
 });
 
-async function refreshSession() {
-    console.log("🔄 Refreshing authentication session...");
-    try {
-        const { data, error } = await window.supabase.auth.refreshSession();
-        if (error) {
-            console.warn("⚠️ Warning: Unable to refresh session", error.message);
-        } else {
-            console.log("✅ Authentication session refreshed!", data);
-        }
-    } catch (err) {
-        console.error("❌ Unexpected error in refreshSession:", err);
-    }
-}
-
 async function updateUserStatus() {
-    if (!window.supabase || !window.supabase.auth) {
-        console.error("❌ ERROR: Supabase is not initialized or `supabase.auth` is missing!");
+    if (!window.appwrite || !window.appwrite.account) {
+        console.error("❌ ERROR: Appwrite is not initialized!");
         return;
     }
 
     try {
         console.log("🔄 Checking authentication status...");
-
-        const { data, error } = await window.supabase.auth.getUser();
-
-        if (error) {
-            console.error("❌ Error fetching user status:", error.message);
-            return;
-        }
-
-        document.getElementById("userStatus").innerText = data.user
-            ? `Signed in as ${data.user.email}`
+        const user = await window.appwrite.account.get();
+        document.getElementById("userStatus").innerText = user
+            ? `Signed in as ${user.email}`
             : "Not Signed In";
+        console.log("✅ User status updated!", user);
+    } catch (error) {
+        console.error("❌ Error fetching user status:", error);
+    }
+}
 
-        console.log("✅ User status updated!", data.user);
-    } catch (err) {
-        console.error("❌ Unexpected error in updateUserStatus:", err);
+async function signIn() {
+    try {
+        console.log("🔄 Redirecting to Appwrite login...");
+        await window.appwrite.account.createOAuth2Session("google");
+    } catch (error) {
+        console.error("❌ Sign-in error:", error);
+    }
+}
+
+async function signOut() {
+    try {
+        await window.appwrite.account.deleteSession("current");
+        console.log("✅ Signed out!");
+        updateUserStatus();
+    } catch (error) {
+        console.error("❌ Sign-out error:", error);
     }
 }
