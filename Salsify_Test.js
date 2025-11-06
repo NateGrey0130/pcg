@@ -1,2 +1,2 @@
-!js property_value(entity, 'Category') + ' copyright 2025'
+!js property_value(entity, 'Artist') + ' copyright 2025'
                   
